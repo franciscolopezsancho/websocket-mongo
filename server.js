@@ -60,6 +60,25 @@ function onRequest(request, response) {
   response.end();
 };
 
+var WebSocketServer = require('ws').Server
+  , http = require('http')
+  , express = require('express')
+  , app = express();
 
+app.use(express.static(__dirname + '/public'));
 
-http.createServer(onRequest).listen(8888);
+var server = http.createServer(app);
+server.listen(8081);
+
+var wss = new WebSocketServer({server: server});
+wss.on('connection', function(ws) {
+  subscribe( function(document) {
+   ws.send(JSON.stringify(document), function() { /* ignore errors */ });
+   console.log("after reques" +document.aloha);
+  });
+  console.log('started client interval');
+  ws.on('close', function() {
+    console.log('stopping client interval');
+    clearInterval(id);
+  });
+});
