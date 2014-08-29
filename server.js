@@ -72,13 +72,29 @@ server.listen(8081);
 
 var wss = new WebSocketServer({server: server});
 wss.on('connection', function(ws) {
+
   subscribe( function(document) {
-   ws.send(JSON.stringify(document), function() { /* ignore errors */ });
+   ws.send(JSON.stringify({"last":document}), function() { /* ignore errors */ });
    console.log("after reques" +document.aloha);
   });
+  ws.send(JSON.stringify({"all":"mosquis"}));
   console.log('started client interval');
   ws.on('close', function() {
     console.log('stopping client interval');
     clearInterval(id);
   });
 });
+
+
+
+
+var retriveAll = function(){
+require('mongodb').MongoClient.connect('mongodb://localhost/test', function(err, db){
+    
+    // make sure you have created capped collection "messages" on db "test"
+	console.log("going for ALALAALALAL colletcion");
+
+ 
+      // seek to latest object
+      console.log( db.collection('messages').find());
+})};

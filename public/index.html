@@ -10,23 +10,33 @@
         display: inline;
       }
     </style>
+	<script src="scripts/mongo.js"></script>
     <script>
       function updateStats(memuse) {
-        document.getElementById('rss').innerHTML = memuse.aloha;
+	  if(memuse.last){
+       document.getElementById('rss').innerHTML = memuse.last.aloha;
+ }
+      }
+	  
+	  function getAll(memuse) {
+        document.getElementById('all').innerHTML = memuse.all;
  
       }
+
 
       var host = window.document.location.host.replace(/:.*/, '');
       var ws = new WebSocket('ws://' + host + ':8081');
       ws.onmessage = function (event) {
+	  console.log(JSON.parse(event.data));
         updateStats(JSON.parse(event.data));
+		getAll(JSON.parse(event.data));
       };
     </script>
   </head>
   <body>
     <strong>Server Stats</strong><br>
     RSS: <div id='rss'></div><br>
-    Heap total: <div id='heapTotal'></div><br>
+    All: <div id='all'></div><br>
     Heap used: <div id='heapUsed'></div><br>
   </body>
 </html>
