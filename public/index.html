@@ -10,16 +10,41 @@
         display: inline;
       }
     </style>
+
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="scripts/mongo.js"></script>
     <script>
       function updateStats(memuse) {
 	  if(memuse.last){
-       document.getElementById('rss').innerHTML = memuse.last.aloha;
+       //document.getElementById('rss').innerHTML = memuse.last.aloha;
+	  
+     $("#table > tbody:first").append("<tr>"
+	 +"<td>"+memuse.last.aloha+"</td>"
+	 +"</tr>");
  }
       }
 	  
 	  function getAll(memuse) {
-        document.getElementById('all').innerHTML = memuse.all;
+        //document.getElementById('all').innerHTML = memuse.all;
+		
+		//jQuery.each(memuse.all, function(index, value) {
+    // $("#list").append("<li>" + value + "</li>");
+	$("#table").append("<tbody></tbody>");
+	jQuery.each(memuse.all, function(index, value) {
+     $("#table > tbody:last").append("<tr>"
+	 +"<td>"+value.aloha+"</td>"
+	 +"</tr>");
+
+});
+		
  
       }
 
@@ -34,9 +59,17 @@
     </script>
   </head>
   <body>
-    <strong>Server Stats</strong><br>
-    RSS: <div id='rss'></div><br>
-    All: <div id='all'></div><br>
-    Heap used: <div id='heapUsed'></div><br>
+   
+  
+   <!--<ul id="list" class="list-group"></ul>-->
+   <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+
+  <!-- Table -->
+  <table id="table" class="table">
+    
+  </table>
+</div>
   </body>
 </html>
