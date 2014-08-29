@@ -27,11 +27,31 @@
        //document.getElementById('rss').innerHTML = memuse.last.aloha;
 	  
      $("#table tr:first").before("<tr>"
-	 +"<td>"+memuse.last.aloha+"</td>"
+	 +print(memuse.last)
 	 +"</tr>");
  }
       }
+	  function print(value){
+		
 	  
+		var toPrint = "";  
+		if(value.interaction.links){
+		toPrint += "<td>"+value.interaction.links.title+"</td>"
+		toPrint += "<td>"+value.interaction.links.normalized_url+"</td>"}
+		else{
+		toPrint += "<td>"+"</td>"+"<td>"+"</td>"
+		}
+		return toPrint
+		+"<td>"+getDomain(String(value.interaction.interaction.link))+"<td>"
+		+"<td>"+value.interaction.interaction.tags+"</td>"
+		+"<td>"+value.interaction.interaction.content+"</td>";
+	  }
+	  
+	  function getDomain(url){
+		var trimmed = url.substring(url.indexOf("/",2)+2,url.length)
+		//url.indexOf("/",3));
+		return trimmed.substring(0,trimmed.indexOf("/",1));
+	  }
 	  function getAll(memuse) {
         //document.getElementById('all').innerHTML = memuse.all;
 		
@@ -40,7 +60,7 @@
 	$("#table").append("<tbody></tbody>");
 	jQuery.each(memuse.all, function(index, value) {
      $("#table > tbody:last").append("<tr>"
-	 +"<td>"+value.aloha+"</td>"
+	  +print(value)
 	 +"</tr>");
 
 });

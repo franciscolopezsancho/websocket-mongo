@@ -1,5 +1,6 @@
 
 var http = require("http");
+var collection = "rawCapped"
 /**
  * How to subscribe for new MongoDB documents in Node.js using tailable cursor
  */
@@ -18,7 +19,7 @@ var subscribe = function(){
     
     // make sure you have created capped collection "messages" on db "test"
 	console.log("going for colletcion")
-    db.collection('messages', function(err, coll) {
+    db.collection(collection, function(err, coll) {
  
       // seek to latest object
       var seekCursor = coll.find(filter).sort({$natural: -1}).limit(1);
@@ -96,7 +97,7 @@ require('mongodb').MongoClient.connect('mongodb://localhost/test', function(err,
 	console.log("going for ALALAALALAL colletcion");
  var result = [];
 
-   db.collection('messages').find().sort({$natural: -1}).toArray(function(err, docs) {
+   db.collection(collection).find().sort({$natural: -1}).toArray(function(err, docs) {
         //console.log(docs)
 		//result.push(docs)
 		sendto(docs)
