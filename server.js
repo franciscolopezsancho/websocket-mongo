@@ -38,7 +38,7 @@ var subscribe = function(){
         
         // create stream and listen
         var stream = coll.find(filter, cursorOptions).sort({$natural: -1}).stream();
-        
+        console.log("QUERY " +query)
 		console.log("some data found"+stream)
         // call the callback
         stream.on('data', next);
@@ -51,16 +51,7 @@ var subscribe = function(){
   
 };
 
-function onRequest(request, response) {
-  console.log("Request received.");
-  response.writeHead(200, {"Content-Type": "text/plain"});
-   subscribe( function(document) {
-  console.log("after reques" +document);
-  
-});
-  response.write("new request");
-  response.end();
-};
+
 
 var WebSocketServer = require('ws').Server
   , http = require('http')
@@ -76,17 +67,18 @@ var wss = new WebSocketServer({server: server});
 wss.on('connection', function(ws) {
  ws.on('message', function(message) {
         query = message;
-		  subscribe( function(document) {
-   ws.send(JSON.stringify({"last":document}), function() { /* ignore errors */ });
-  
-  });
+		//just to TEST
+		
+
+		//just to test
+		 
  
   retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
     });
 	
   subscribe( function(document) {
    ws.send(JSON.stringify({"last":document}), function() { /* ignore errors */ });
-   console.log("after reques" +document.aloha);
+   console.log("after reques with no filter" +document);
   });
  
   retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
@@ -104,7 +96,7 @@ var retriveAll = function(sendto,query){
 require('mongodb').MongoClient.connect('mongodb://localhost/test', function(err, db){
     
     // make sure you have created capped collection "messages" on db "test"
-	console.log("going for ALALAALALAL colletcion");
+	console.log("going for ALL colletcion");
  var result = [];
    db.collection(collection).find({"interaction.interaction.tags":new RegExp( query, 'i')}).sort({$natural: -1}).toArray(function(err, docs) {
         //console.log(docs)

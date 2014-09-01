@@ -107,10 +107,12 @@
       var host = window.document.location.host.replace(/:.*/, '');
       var ws = new WebSocket('ws://' + host + ':8081');
       ws.onmessage = function (event) {
+	  if(event){
+	  
 	  console.log(JSON.parse(event.data));
         updateStats(JSON.parse(event.data));
 		getAll(JSON.parse(event.data));
-		
+		}
       };
 	
 $("#send").click(function() {
