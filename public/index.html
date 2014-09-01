@@ -1,133 +1,107 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <style>
-      body {
-        font-family: Tahoma, Geneva, sans-serif;
-      }
-
-      div {
-        display: inline;
-      }
+        body {
+            font-family: Tahoma, Geneva, sans-serif;
+        }
+        div {
+            display: inline;
+        }
     </style>
 
-<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-	<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="css/social.css">
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/social.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="scripts/mongo.js"></script>
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<script src="scripts/mongo.js"></script>
-  
-  </head>
-  <body>
-   
-  
-  
-  <div class="row">
-  <div class="col-xs-6 col-md-6">
-  <div class="page-header">
-  <h1>Streaming social content <small>on live</small></h1>
-  <button type="button" id="send" class="btn btn-default">send</button>
-  <div class="input-group">
-  <span class="input-group-addon">Filter</span>
-  <input id="filter" type="text" class="form-control" placeholder="This filters by 'Tags' as contains. Press enter to apply filter. No value will retreive all">
-</div>
-  </div>
-  
-  <!-- Default panel contents -->
-  
-  
-<div class="panel-body">
-  </div>
-  <!-- Table -->
-  
-  <table id="table" class="table table-condensed">
-  <thead>
-	<th>Date</th>
-	<th>Site</th>
-	<th>Content</th>
-	<th>Title</th>
-	<th>Normalized Url</th>
-	<th>Tags</th>
-	
-  </thead>
-    
-  </table>
-</div>
+</head>
 
-</div>
+<body>
+    <div class="row">
+        <div class="col-xs-6 col-md-6">
+            <div class="page-header">
+                <h1>Streaming social content <small>on live</small></h1>
+                <button type="button" id="send" class="btn btn-default">send</button>
+                <div class="input-group">
+                    <span class="input-group-addon">Filter</span>
+                    <input id="filter" type="text" class="form-control" placeholder="This filters by 'Tags' as contains. Press enter to apply filter. No value will retreive all">
+                </div>
+            </div>
+            <div class="panel-body">
+            </div>
+            <!-- Table -->
+            <table id="table" class="table table-condensed">
+                <thead>
+                    <th>Date</th>
+                    <th>Site</th>
+                    <th>Content</th>
+                    <th>Title</th>
+                    <th>Normalized Url</th>
+                    <th>Tags</th>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <script>
+        function updateStats(memuse) {
+            if (memuse.last) {
+                $("tbody tr:first").before("<tr>" + print(memuse.last) + "</tr>");
+            }
+        }
 
+        function print(value) {
+            var toPrint = "";
+            if (value.interaction.links) {
+                toPrint += "<td class='title'>" + value.interaction.links.title + "</td>"
+                toPrint += "<td class='norm_url'>" + value.interaction.links.normalized_url + "</td>"
+            } else {
+                toPrint += "<td>" + "</td>" + "<td>" + "</td>"
+            }
+            return "<td class='date'>" + value.interaction.interaction.created_at + "</td>" + "<td class='domain'>" + getDomain(String(value.interaction.interaction.link)) + "</td>" + "<td class='content'>" + value.interaction.interaction.content + "</td>" + toPrint + "<td class='tags'>" + value.interaction.interaction.tags + "</td>";
+        }
 
-  <script>
-      function updateStats(memuse) {
-	  if(memuse.last){
-     $("tbody tr:first").before("<tr>"
-	 +print(memuse.last)
-	 +"</tr>");
- }
-      }
-	  function print(value){
-		
-	  
-		var toPrint = "";  
-		if(value.interaction.links){
-		toPrint += "<td class='title'>"+value.interaction.links.title+"</td>"
-		toPrint += "<td class='norm_url'>"+value.interaction.links.normalized_url+"</td>"}
-		else{
-		toPrint += "<td>"+"</td>"+"<td>"+"</td>"
-		}
-		return "<td class='date'>"+value.interaction.interaction.created_at+"</td>"
-		+"<td class='domain'>"+getDomain(String(value.interaction.interaction.link))+"</td>"
-		+"<td class='content'>"+value.interaction.interaction.content+"</td>"
-		+toPrint
-		+"<td class='tags'>"+value.interaction.interaction.tags+"</td>";
-	  }
-	  
-	  function getDomain(url){
-		var trimmed = url.substring(url.indexOf("/",2)+2,url.length)
-		return trimmed.substring(0,trimmed.indexOf("/",1));
-	  }
-	  function getAll(memuse) {
-	$("#table").append("<tbody></tbody>");
-	jQuery.each(memuse.all, function(index, value) {
-     $("#table > tbody:last").append("<tr>"
-	  +print(value)
-	 +"</tr>");
+        function getDomain(url) {
+            var trimmed = url.substring(url.indexOf("/", 2) + 2, url.length)
+            return trimmed.substring(0, trimmed.indexOf("/", 1));
+        }
 
-});
-		
- 
-      }
+        function getAll(memuse) {
+            $("#table").append("<tbody></tbody>");
+            jQuery.each(memuse.all, function(index, value) {
+                $("#table > tbody:last").append("<tr>" + print(value) + "</tr>");
+
+            });
 
 
-      var host = window.document.location.host.replace(/:.*/, '');
-      var ws = new WebSocket('ws://' + host + ':8081');
-      ws.onmessage = function (event) {
-	  if(event){
-	  
-	  console.log(JSON.parse(event.data));
-        updateStats(JSON.parse(event.data));
-		getAll(JSON.parse(event.data));
-		}
-      };
-	
-$("#send").click(function() {
-   ws.send($("#filter").val());   
-$("tbody").children().remove()
-});
+        }
 
-$('#filter').keypress(function(event){
-  if(event.keyCode == 13){
-    $('#send').click();
-  }
-});
+        var host = window.document.location.host.replace(/:.*/, '');
+        var ws = new WebSocket('ws://' + host + ':8081');
+        ws.onmessage = function(event) {
+            if (event) {
 
+                console.log(JSON.parse(event.data));
+                updateStats(JSON.parse(event.data));
+                getAll(JSON.parse(event.data));
+            }
+        };
 
+        $("#send").click(function() {
+            ws.send($("#filter").val());
+            $("tbody").children().remove()
+        });
 
+        $('#filter').keypress(function(event) {
+            if (event.keyCode == 13) {
+                $('#send').click();
+            }
+        });
     </script>
-  </body>
+</body>
 </html>

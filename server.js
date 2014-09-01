@@ -1,5 +1,33 @@
-
+//##################### WEBSOCKET SERVER ##################
 var http = require("http");
+var WebSocketServer = require('ws').Server
+  , http = require('http')
+  , express = require('express')
+  , app = express();
+app.use(express.static(__dirname + '/public'));
+
+var server = http.createServer(app);
+server.listen(8081);
+
+var wss = new WebSocketServer({server: server});
+wss.on('connection', function(ws) {
+	ws.on('message', function(message) {
+        query = message; 
+		retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
+    });
+	
+	subscribe( function(document) {
+		ws.send(JSON.stringify({"last":document}), function() { /* ignore errors */ });
+	});
+ 
+	retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
+	ws.on('close', function() {
+    //clearInterval(id); whats this??? for the timestamp maybe?
+	});
+});
+
+//######### MONGO CONNECTION #################
+
 var collection = "rawCapped"
 var query = "";
 /**
@@ -42,8 +70,6 @@ var subscribe = function(){
 		console.log("some data found"+stream)
         // call the callback
         stream.on('data', next);
-			
-
       });
     });
  
@@ -51,59 +77,11 @@ var subscribe = function(){
   
 };
 
-
-
-var WebSocketServer = require('ws').Server
-  , http = require('http')
-  , express = require('express')
-  , app = express();
-
-app.use(express.static(__dirname + '/public'));
-
-var server = http.createServer(app);
-server.listen(8081);
-
-var wss = new WebSocketServer({server: server});
-wss.on('connection', function(ws) {
- ws.on('message', function(message) {
-        query = message;
-		//just to TEST
-		
-
-		//just to test
-		 
- 
-  retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
-    });
-	
-  subscribe( function(document) {
-   ws.send(JSON.stringify({"last":document}), function() { /* ignore errors */ });
-   console.log("after reques with no filter" +document);
-  });
- 
-  retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
-  console.log('started client interval');
-  ws.on('close', function() {
-    console.log('stopping client interval');
-    //clearInterval(id); whats this??? for the timestamp maybe?
-  });
-});
-
-
-
-
-var retriveAll = function(sendto,query){
-require('mongodb').MongoClient.connect('mongodb://localhost/test', function(err, db){
-    
-    // make sure you have created capped collection "messages" on db "test"
-	console.log("going for ALL colletcion");
- var result = [];
-   db.collection(collection).find({"interaction.interaction.tags":new RegExp( query, 'i')}).sort({$natural: -1}).toArray(function(err, docs) {
-        //console.log(docs)
-		//result.push(docs)
-		sendto(docs)
+var retriveAll = function(anonymus_function,query){
+	require('mongodb').MongoClient.connect('mongodb://localhost/test', function(err, db){
+	var result = [];
+	db.collection(collection).find({"interaction.interaction.tags":new RegExp( query, 'i')}).sort({$natural: -1}).toArray(function(err, docs) {
+		anonymus_function(docs)
         db.close();
-      });
-      // seek to latest object
-	   console.log(result)
+	});
 })};
