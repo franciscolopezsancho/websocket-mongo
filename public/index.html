@@ -21,7 +21,48 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="scripts/mongo.js"></script>
-    <script>
+  
+  </head>
+  <body>
+   
+  
+  
+  <div class="row">
+  <div class="col-xs-6 col-md-6">
+  <div class="page-header">
+  <h1>Streaming social content <small>Nicky manage</small></h1>
+  <button type="button" id="send" class="btn btn-default">send</button>
+  <div class="input-group">
+  <span class="input-group-addon">Filter</span>
+  <input id="filter" type="text" class="form-control" placeholder="filter by tag. Press enter to send">
+</div>
+  </div>
+   <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+  
+<div class="panel-body">
+  </div>
+  <!-- Table -->
+  
+  <table id="table" class="table table-condensed">
+  <thead>
+	<th>Date</th>
+	<th>Site</th>
+	<th>Content</th>
+	<th>Title</th>
+	<th>Normalized Url</th>
+	<th>Tags</th>
+	
+  </thead>
+    
+  </table>
+</div>
+
+</div>
+</div>
+
+  <script>
       function updateStats(memuse) {
 	  if(memuse.last){
      $("#table tr:first").before("<tr>"
@@ -70,41 +111,20 @@
         updateStats(JSON.parse(event.data));
 		getAll(JSON.parse(event.data));
       };
-    </script>
-  </head>
-  <body>
-   
-  
-  
-  <div class="row">
-  <div class="col-xs-6 col-md-6">
-  <div class="page-header">
-  <h1>Streaming social content <small>Nicky manage</small></h1>
-  </div>
-   <div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Panel heading</div>
-  
-<div class="panel-body">
-  </div>
-  <!-- Table -->
-  
-  <table id="table" class="table table-condensed">
-  <thead>
-	<th>Date</th>
-	<th>Site</th>
-	<th>Content</th>
-	<th>Title</th>
-	<th>Normalized Url</th>
-	<th>Tags</th>
 	
-  </thead>
-    
-  </table>
+$("#send").click(function() {
+   ws.send($("#filter").val());   
+$("tbody").remove()
+});
 
-</div>
+$('#filter').keypress(function(event){
+  if(event.keyCode == 13){
+    $('#send').click();
+  }
+});
 
-</div>
-</div>
+
+
+    </script>
   </body>
 </html>

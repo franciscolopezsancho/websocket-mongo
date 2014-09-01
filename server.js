@@ -74,7 +74,16 @@ server.listen(8081);
 
 var wss = new WebSocketServer({server: server});
 wss.on('connection', function(ws) {
-
+ ws.on('message', function(message) {
+        query = message;
+		  subscribe( function(document) {
+   ws.send(JSON.stringify({"last":document}), function() { /* ignore errors */ });
+  
+  });
+ 
+  retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
+    });
+	
   subscribe( function(document) {
    ws.send(JSON.stringify({"last":document}), function() { /* ignore errors */ });
    console.log("after reques" +document.aloha);

@@ -1,0 +1,23 @@
+.title {
+max-width:300px;
+}
+.date {
+max-width:300px;
+}
+.norm_url {
+max-width:500px;
+  overflow:hidden;
+}
+.domain {
+max-width:300px;
+}
+.tags {
+max-width:300px;
+}
+.content {
+max-width:600px;
+}
+
+#send  {
+ visibility:hidden;
+}
