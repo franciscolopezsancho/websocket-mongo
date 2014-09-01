@@ -21,3 +21,16 @@ max-width:600px;
 #send  {
  visibility:hidden;
 }
+.input-group{
+font-family:"Irma Text Light";
+}
+.filter-group{
+float:right;
+}
+.page-title{
+font-family:"Irma Text Slab Thin";
+}
+th#table.social-table{
+font-weight:bold;
+font-size:16px;
+}

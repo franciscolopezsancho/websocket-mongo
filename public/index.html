@@ -3,7 +3,7 @@
 <head>
     <style>
         body {
-            font-family: Tahoma, Geneva, sans-serif;
+            font-family: "Irma Text Light", Geneva, sans-serif;
         }
         div {
             display: inline;
@@ -14,21 +14,23 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/social.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/textfonts.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="scripts/mongo.js"></script>
+
 
 </head>
 
 <body>
     <div class="row">
         <div class="col-xs-6 col-md-6">
-            <div class="page-header">
-                <h1>Streaming social content <small>on live</small></h1>
+            <div >
+                <h2 class="page-title">Streaming social content <small>on live</small></h2>
                 <button type="button" id="send" class="btn btn-default">send</button>
-                <div class="input-group">
+                <div id="filter-group" class="input-group">
                     <span class="input-group-addon">Filter</span>
                     <input id="filter" type="text" class="form-control" placeholder="This filters by 'Tags' as contains. Press enter to apply filter. No value will retreive all">
                 </div>
@@ -36,7 +38,7 @@
             <div class="panel-body">
             </div>
             <!-- Table -->
-            <table id="table" class="table table-condensed">
+            <table id="table" class="table table-condensed social-table">
                 <thead>
                     <th>Date</th>
                     <th>Site</th>
@@ -48,60 +50,7 @@
             </table>
         </div>
     </div>
-    <script>
-        function updateStats(memuse) {
-            if (memuse.last) {
-                $("tbody tr:first").before("<tr>" + print(memuse.last) + "</tr>");
-            }
-        }
-
-        function print(value) {
-            var toPrint = "";
-            if (value.interaction.links) {
-                toPrint += "<td class='title'>" + value.interaction.links.title + "</td>"
-                toPrint += "<td class='norm_url'>" + value.interaction.links.normalized_url + "</td>"
-            } else {
-                toPrint += "<td>" + "</td>" + "<td>" + "</td>"
-            }
-            return "<td class='date'>" + value.interaction.interaction.created_at + "</td>" + "<td class='domain'>" + getDomain(String(value.interaction.interaction.link)) + "</td>" + "<td class='content'>" + value.interaction.interaction.content + "</td>" + toPrint + "<td class='tags'>" + value.interaction.interaction.tags + "</td>";
-        }
-
-        function getDomain(url) {
-            var trimmed = url.substring(url.indexOf("/", 2) + 2, url.length)
-            return trimmed.substring(0, trimmed.indexOf("/", 1));
-        }
-
-        function getAll(memuse) {
-            $("#table").append("<tbody></tbody>");
-            jQuery.each(memuse.all, function(index, value) {
-                $("#table > tbody:last").append("<tr>" + print(value) + "</tr>");
-
-            });
-
-
-        }
-
-        var host = window.document.location.host.replace(/:.*/, '');
-        var ws = new WebSocket('ws://' + host + ':8081');
-        ws.onmessage = function(event) {
-            if (event) {
-
-                console.log(JSON.parse(event.data));
-                updateStats(JSON.parse(event.data));
-                getAll(JSON.parse(event.data));
-            }
-        };
-
-        $("#send").click(function() {
-            ws.send($("#filter").val());
-            $("tbody").children().remove()
-        });
-
-        $('#filter').keypress(function(event) {
-            if (event.keyCode == 13) {
-                $('#send').click();
-            }
-        });
-    </script>
+     <script src="scripts/main.js"></script>
+	 <script src="scripts/websocket.js"></script>
 </body>
 </html>
