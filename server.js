@@ -1,6 +1,7 @@
 
 var http = require("http");
 var collection = "rawCapped"
+var query = "Cyru"
 /**
  * How to subscribe for new MongoDB documents in Node.js using tailable cursor
  */
@@ -10,7 +11,7 @@ var subscribe = function(){
  
   var args = [].slice.call(arguments);
   var next = args.pop();
-  var filter = args.shift() || {};
+  var filter = {"interaction.interaction.tags":new RegExp( query, 'i')};
   
  
   
@@ -79,7 +80,7 @@ wss.on('connection', function(ws) {
    console.log("after reques" +document.aloha);
   });
  
-  retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));})
+  retriveAll(function(send){ ws.send(JSON.stringify({"all":send}));},query)
   console.log('started client interval');
   ws.on('close', function() {
     console.log('stopping client interval');
@@ -90,14 +91,13 @@ wss.on('connection', function(ws) {
 
 
 
-var retriveAll = function(sendto){
+var retriveAll = function(sendto,query){
 require('mongodb').MongoClient.connect('mongodb://localhost/test', function(err, db){
     
     // make sure you have created capped collection "messages" on db "test"
 	console.log("going for ALALAALALAL colletcion");
  var result = [];
-
-   db.collection(collection).find().sort({$natural: -1}).toArray(function(err, docs) {
+   db.collection(collection).find({"interaction.interaction.tags":new RegExp( query, 'i')}).sort({$natural: -1}).toArray(function(err, docs) {
         //console.log(docs)
 		//result.push(docs)
 		sendto(docs)
