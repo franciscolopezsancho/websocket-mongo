@@ -82,10 +82,6 @@ var retriveAll = function(anonymus_function,query){
 	var result = [];
 	db.collection(collection).find({"interaction.interaction.tags":new RegExp( query, 'i')}).sort({$natural: -1}).toArray(function(err, docs) {
 		anonymus_function(docs)
-        //db.close();
 	});
 	setTimeout(function(){db.close()},10000)
-	
-	
-	console.log("some raws found")
 })};
