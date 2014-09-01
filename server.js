@@ -1,7 +1,7 @@
 
 var http = require("http");
 var collection = "rawCapped"
-var query = "Cyru"
+var query = "";
 /**
  * How to subscribe for new MongoDB documents in Node.js using tailable cursor
  */
