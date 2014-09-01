@@ -13,7 +13,12 @@ function print(value) {
         toPrint += "<td>" + "</td>" + "<td>" + "</td>"
     }
 	var domain =  getDomain(String(value.interaction.interaction.link)) ;
-    return "<td class='date'>" + value.interaction.interaction.created_at + "</td>" + "<td class='domain'><img src=http://www.google.com/s2/favicons?domain=" +domain+ " alt><span title="+domain+"></span></td>" + "<td class='content'>" + value.interaction.interaction.content + "</td>" + toPrint + "<td class='tags'>" + value.interaction.interaction.tags + "</td>";
+    return "<td class='date'>" + parseDate(value.interaction.interaction.created_at) + "</td>" + "<td class='domain'><img src=http://www.google.com/s2/favicons?domain=" +domain+ " ><span title="+domain+"></span></td>" + "<td class='content'>" + value.interaction.interaction.content + "</td>" + toPrint + "<td class='tags'>" + value.interaction.interaction.tags + "</td>";
+}
+
+function parseDate(date){
+return moment(date).format('hh:mm:ss MM/Do/YY');
+
 }
 
 function getDomain(url) {
