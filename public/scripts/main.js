@@ -17,7 +17,7 @@ function print(value) {
 }
 
 function parseDate(date){
-return moment(date).format('hh:mm:ss MM/Do/YY');
+return moment(date).format('HH:mm:ss MM/Do/YY');
 
 }
 

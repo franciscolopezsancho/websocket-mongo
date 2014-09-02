@@ -1,36 +1,38 @@
 .title {
-max-width:300px;
+	max-width:300px;
+overflow:hidden;
 }
 .date {
-max-width:300px;
+	max-width:300px;
 }
 .norm_url {
-max-width:500px;
-  overflow:hidden;
+	max-width:500px;
+overflow:hidden;
 }
 .domain {
-max-width:300px;
+	max-width:300px;
 }
 .tags {
-max-width:300px;
+	max-width:300px;
 }
 .content {
-max-width:600px;
+	max-width:600px;
+overflow:hidden;
 }
 
 #send  {
- visibility:hidden;
+visibility:hidden;
 }
 .input-group{
-font-family:"Irma Text Light";
+	font-family:"Irma Text Light";
 }
 .filter-group{
 float:right;
 }
 .page-title{
-font-family:"Irma Text Slab Thin";
+	font-family:"Irma Text Slab Thin";
 }
 th#table.social-table{
-font-weight:bold;
-font-size:16px;
+	font-weight:bold;
+	font-size:16px;
 }
