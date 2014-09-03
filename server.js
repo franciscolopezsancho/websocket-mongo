@@ -32,7 +32,7 @@ wss.on('connection', function(ws) {
 //######### MONGO CONNECTION #################
 
 var mongo_collection = "rawCapped";
-var mongo_server_url = "54.77.66.88";
+var mongo_server_url = "";
 var mongo_db="datasift"
 var query = "";
 var stream = "";
