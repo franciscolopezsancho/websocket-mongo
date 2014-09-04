@@ -6,19 +6,35 @@ function getLast(memuse) {
 
 function print(value) {
     var toPrint = "";
-    if (value.interaction.links) {
-        toPrint += "<td class='title'>" + value.interaction.links.title + "</td>"
-        toPrint += "<td class='norm_url'>" + value.interaction.links.normalized_url + "</td>"
+    if (value.interaction.links.title) {
+        toPrint += "<td class='norm_url'>" + value.interaction.links.title + "</td>"
     } else {
-        toPrint += "<td>" + "</td>" + "<td>" + "</td>"
+        toPrint += "<td>" + "</td>" 
+    }
+	 if (value.interaction.links.normalized_url) {
+        toPrint += "<td class='norm_url'>" + createNormalizedLinks(value.interaction.links.normalized_url) + "</td>"
+    } else {
+        toPrint += "<td>" + "</td>" 
     }
 	var domain =  getDomain(String(value.interaction.interaction.link)) ;
-    return "<td class='date'>" + parseDate(value.interaction.interaction.created_at) + "</td>" + "<td class='domain'><img src=http://www.google.com/s2/favicons?domain=" +domain+ " ><span title="+domain+"></span></td>" + "<td class='content'>" + value.interaction.interaction.content + "</td>" + toPrint + "<td class='tags'>" + value.interaction.interaction.tags + "</td>";
+    return "<td class='date'>" + parseDate(value.interaction.interaction.created_at) + "</td>" + "<td class='domain'><img title="+domain+" src=http://www.google.com/s2/favicons?domain=" +domain+ " ></td>" + "<td class='content'>" + value.interaction.interaction.content + "</td>" + toPrint + "<td class='tags'>" + value.interaction.interaction.tags + "</td>";
 }
 
 function parseDate(date){
 return moment(date).format('HH:mm:ss MM/Do/YY');
 
+}
+
+function createNormalizedLinks(bunch_urls){
+console.log( typeof bunch_urls);
+console.log( bunch_urls);
+var result = "";
+ var norm_urls = new String(bunch_urls).split(",");
+ for (var i = 0; i < norm_urls.length; i++) {
+    result = result + "<a href="+norm_urls[i]+"/a>"+norm_urls[i]+"</br>";
+}
+
+return result;
 }
 
 function getDomain(url) {

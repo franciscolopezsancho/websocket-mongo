@@ -11,7 +11,9 @@ server.listen(8081);
 
 var wss = new WebSocketServer({server: server});
 wss.on('connection', function(ws) {
-		console.log("connecting");
+		if(query != ""){
+			query = "";
+		}
 		ws.on('message', function(message) {
 			console.log("messaging");
 			query = message; 
@@ -32,10 +34,9 @@ wss.on('connection', function(ws) {
 //######### MONGO CONNECTION #################
 
 var mongo_collection = "rawCapped";
-var mongo_server_url = "";
+var mongo_server_url = "54.77.66.88";
 var mongo_db="datasift"
 var query = "";
-var stream = "";
 /**
  * How to subscribe for new MongoDB documents in Node.js using tailable cursor
  */
@@ -86,7 +87,7 @@ function subscribe(){
 var retriveAll = function(anonymus_function,query){
 	require('mongodb').MongoClient.connect('mongodb://'+mongo_server_url+'/'+mongo_db, function(err, db){
 			var result = [];
-			db.collection(mongo_collection).find({"interaction.interaction.tags":new RegExp( query, 'i')}).sort({$natural: -1}).toArray(function(err, docs) {
+			db.collection(mongo_collection).find({"interaction.interaction.tags":new RegExp( query, 'i')}).sort({$natural: -1}).limit(100).toArray(function(err, docs) {
 				anonymus_function(docs)
 				});
 			setTimeout(function(){db.close()},10000)
