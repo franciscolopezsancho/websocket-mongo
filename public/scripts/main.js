@@ -17,7 +17,7 @@ function print(value) {
         toPrint += "<td>" + "</td>" 
     }
 	var domain =  getDomain(String(value.interaction.interaction.link)) ;
-    return "<td class='date'>" + parseDate(value.interaction.interaction.created_at) + "</td>" + "<td class='domain'><img title="+domain+" src=http://www.google.com/s2/favicons?domain=" +domain+ " ></td>" + "<td class='content'>" + value.interaction.interaction.content + "</td>" + toPrint + "<td class='tags'>" + value.interaction.interaction.tags + "</td>";
+    return "<td class='date'>" + parseDate(value.interaction.interaction.created_at) + "</td>" + "<td class='domain'><img title="+domain+" src=http://www.google.com/s2/favicons?domain=" +domain+ " ></td>"+ "<td class='tags'>" + value.interaction.interaction.tags + "</td>" + toPrint  + "<td class='content'>" + value.interaction.interaction.content + "</td>";
 }
 
 function parseDate(date){
